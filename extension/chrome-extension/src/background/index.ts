@@ -7,10 +7,14 @@ exampleThemeStorage.get().then(theme => {
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === "complete" && tab.url) {
-    if (tab.url.includes("amazon.com") || tab.url.includes("amazon.ca")) {
-      chrome.action.enable(tabId);
-    } else {
-      chrome.action.disable(tabId);
-    }
+    chrome.action.getPopup({ tabId }, (popup) => {
+      if (popup) {
+        if (tab.url.includes("amazon.com") || tab.url.includes("amazon.ca")) {
+          chrome.action.enable(tabId);
+        } else {
+          chrome.action.disable(tabId);
+        }
+      }
+    });
   }
 });
