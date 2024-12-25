@@ -5,5 +5,12 @@ exampleThemeStorage.get().then(theme => {
   console.log('theme', theme);
 });
 
-console.log('background loaded');
-console.log("Edit 'chrome-extension/src/background/index.ts' and save to reload.");
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.status === "complete" && tab.url) {
+    if (tab.url.includes("amazon.com") || tab.url.includes("amazon.ca")) {
+      chrome.action.enable(tabId);
+    } else {
+      chrome.action.disable(tabId);
+    }
+  }
+});
